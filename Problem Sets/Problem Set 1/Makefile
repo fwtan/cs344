@@ -1,12 +1,13 @@
-NVCC=nvcc
+HOST_COMPILER=g++
+NVCC=/usr/local/cuda/bin/nvcc -ccbin $(HOST_COMPILER)
 
 ###################################
 # These are the default install   #
 # locations on most linux distros #
 ###################################
 
-OPENCV_LIBPATH=/usr/lib
-OPENCV_INCLUDEPATH=/usr/include
+#OPENCV_LIBPATH=/usr/lib
+#OPENCV_INCLUDEPATH=/usr/include
 
 ###################################################
 # On Macs the default install locations are below #
@@ -17,19 +18,19 @@ OPENCV_INCLUDEPATH=/usr/include
 
 # or if using MacPorts
 
-#OPENCV_LIBPATH=/opt/local/lib
-#OPENCV_INCLUDEPATH=/opt/local/include
+OPENCV_LIBPATH=/opt/local/lib
+OPENCV_INCLUDEPATH=/opt/local/include
 
-OPENCV_LIBS=-lopencv_core -lopencv_imgproc -lopencv_highgui
+OPENCV_LIBS=-lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_imgcodecs
 
-CUDA_INCLUDEPATH=/usr/local/cuda-5.0/include
+#CUDA_INCLUDEPATH=/usr/local/cuda-5.0/include
 
 ######################################################
 # On Macs the default install locations are below    #
 # ####################################################
 
-#CUDA_INCLUDEPATH=/usr/local/cuda/include
-#CUDA_LIBPATH=/usr/local/cuda/lib
+CUDA_INCLUDEPATH=/usr/local/cuda/include
+CUDA_LIBPATH=/usr/local/cuda/lib
 
 NVCC_OPTS=-O3 -arch=sm_20 -Xcompiler -Wall -Xcompiler -Wextra -m64
 
@@ -42,7 +43,7 @@ main.o: main.cpp timer.h utils.h reference_calc.cpp compare.cpp HW1.cpp
 	g++ -c main.cpp $(GCC_OPTS) -I $(CUDA_INCLUDEPATH) -I $(OPENCV_INCLUDEPATH)
 
 student_func.o: student_func.cu utils.h
-	nvcc -c student_func.cu $(NVCC_OPTS)
+	$(NVCC) -c student_func.cu $(NVCC_OPTS)
 
 compare.o: compare.cpp compare.h
 	g++ -c compare.cpp -I $(OPENCV_INCLUDEPATH) $(GCC_OPTS) -I $(CUDA_INCLUDEPATH)
